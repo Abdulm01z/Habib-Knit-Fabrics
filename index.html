@@ -1,458 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RFQ · Habib Knit Fabrics (Pvt) Limited</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RFQ · Habib Knit Fabrics (Pvt) Limited</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Roboto, system-ui, -apple-system, sans-serif; }
 
-    body {
-      background: #eef2f7;
-      padding: 20px;
-      color: #1a2b3c;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+  html, body { background:#eef2f7; }
 
-    /* A4 fixed container */
+  body {
+    padding:24px 12px;
+    color:#1a2b3c;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    min-height:100vh;
+  }
+
+  .container {
+    width:100%;
+    max-width:794px;
+    background:#ffffff;
+    padding:40px 44px 36px;
+    border-radius:12px;
+    box-shadow:0 12px 40px rgba(0,0,0,0.06);
+    position:relative;
+  }
+
+  /* Watermark: on screen it's positioned once inside the form.
+     On print it switches to `fixed`, which reliably repeats on EVERY printed page
+     (the old `absolute` version only ever appeared on page 1). */
+  .watermark {
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:55%;
+    max-width:380px;
+    pointer-events:none;
+    z-index:0;
+    opacity:0.08;
+    text-align:center;
+  }
+  .watermark img { width:100%; height:auto; filter:grayscale(100%) brightness(1.05); }
+
+  .content-area { position:relative; z-index:1; }
+
+  /* header */
+  .header-table { width:100%; border-collapse:collapse; border-bottom:2px solid #005792; padding-bottom:14px; margin-bottom:22px; }
+  .header-table td { vertical-align:middle; border:none; padding:0 6px 0 0; }
+  .header-left { width:14%; text-align:left; }
+  .header-center { width:56%; text-align:center; }
+  .header-right { width:30%; text-align:right; }
+
+  .logo-img { width:70px; height:70px; object-fit:contain; border-radius:12px; background:#f8fafc; padding:4px; }
+
+  .company-title { color:#005792; font-size:20px; font-weight:700; letter-spacing:-0.2px; margin-bottom:6px; }
+  .company-subtitle {
+    color:#2c3e50; font-weight:600; font-size:11.5px; letter-spacing:0.5px; text-transform:uppercase;
+    background:#eef4fa; display:inline-block; padding:3px 14px; border-radius:40px; margin:2px 3px;
+  }
+
+  .meta-row { display:flex; justify-content:flex-end; align-items:center; gap:6px; font-size:13px; margin-bottom:6px; white-space:nowrap; }
+  .meta-input {
+    border:1px solid #dce4ec; border-radius:8px; padding:5px 10px; font-size:13px; font-weight:600;
+    color:#0b1e2e; width:150px; text-align:right; background:#fafcff;
+  }
+  .meta-input:focus { border-color:#005792; outline:none; box-shadow:0 0 0 3px rgba(0,87,146,0.1); background:#fff; }
+
+  /* table */
+  .table-wrap { margin:18px 0 6px; }
+
+  table.data-table { width:100%; border-collapse:collapse; table-layout:fixed; }
+
+  table.data-table thead { display:table-header-group; } /* repeats header on every printed page */
+
+  table.data-table th {
+    background:#005792; color:#fff; padding:10px 6px; font-weight:600; font-size:10.5px; border:none; letter-spacing:0.2px;
+  }
+  table.data-table th:first-child { border-radius:10px 0 0 0; }
+  table.data-table th:last-child { border-radius:0 10px 0 0; }
+
+  table.data-table td { border:1px solid #d7e1ec; padding:3px 2px; vertical-align:middle; }
+
+  table.data-table tbody tr:nth-child(even) td { background:#f7fafc; }
+  table.data-table tbody tr:nth-child(odd) td { background:#ffffff; }
+
+  table.data-table tbody tr { break-inside:avoid; page-break-inside:avoid; }
+
+  table.data-table tfoot td {
+    background:#eaf2f8; font-weight:700; color:#003f66; padding:10px 8px; border:1px solid #d7e1ec; font-size:13px;
+  }
+
+  .text-center { text-align:center !important; }
+  .text-left { text-align:left !important; }
+  .text-right { text-align:right !important; }
+
+  table.data-table input {
+    border:none; background:transparent; width:100%; padding:8px 6px; font-size:12.5px; color:#142433; border-radius:6px;
+  }
+  table.data-table input:focus {
+    background:#fff; outline:2px solid #005792; outline-offset:-1px; box-shadow:0 0 0 4px rgba(0,87,146,0.06);
+  }
+  table.data-table input::placeholder { color:#94a7b8; font-weight:400; }
+
+  /* remove number spinner arrows for a cleaner, print-safe look */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; }
+  input[type=number] { -moz-appearance:textfield; appearance:textfield; }
+
+  .qty-input, .unit-input, .date-input, .rate-input { text-align:center; }
+  .desc-input { text-align:left; }
+
+  .amount-cell { font-weight:600; color:#1f3a57; padding:8px 6px; text-align:right; font-size:12.5px; }
+
+  .action-col { width:36px; }
+  .btn-remove {
+    background:rgba(229,62,62,0.85); color:#fff; width:26px; height:26px; padding:0; font-size:12px;
+    border-radius:40px; display:flex; align-items:center; justify-content:center; margin:0 auto; border:none; cursor:pointer;
+  }
+  .btn-remove:hover { background:#c53030; }
+
+  /* buttons */
+  .btn-group { margin:20px 0 26px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  button {
+    padding:9px 18px; border:none; border-radius:40px; font-weight:600; font-size:12px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px; transition:transform .15s, box-shadow .15s; background:#f1f6fa; color:#1f3a57;
+  }
+  button:hover { transform:translateY(-1px); }
+  button:active { transform:scale(0.97); }
+  .btn-add { background:#005792; color:#fff; }
+  .btn-add:hover { background:#003f66; }
+  .btn-clear { background:#edf2f7; color:#2d3f57; }
+  .btn-clear:hover { background:#e2e8f0; }
+  .btn-export { background:#1e6f5c; color:#fff; }
+  .btn-export:hover { background:#155a4a; }
+  .btn-print { background:#2d3748; color:#fff; margin-left:auto; }
+  .btn-print:hover { background:#1a202c; }
+
+  /* footer */
+  .footer-section {
+    padding-top:26px; border-top:1px dashed #cbdae8; display:flex; justify-content:space-between;
+    break-inside:avoid; page-break-inside:avoid;
+  }
+  .sig-block { width:45%; }
+  .sig-title { font-size:11px; font-weight:700; color:#005792; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
+  .sig-line { border-top:2px solid #1f3a57; width:100%; max-width:200px; padding-top:6px; margin-top:32px; font-size:12px; font-weight:600; color:#3d5775; }
+  .sig-block-right { text-align:right; }
+  .sig-block-right .sig-line { margin-left:auto; }
+
+  .hint { font-size:11px; color:#7c8ea3; margin:6px 2px 0; }
+
+  @media (max-width:640px) {
+    .container { padding:22px 16px; }
+    .header-left, .header-center, .header-right { display:block; width:100%; text-align:center; }
+    .header-table td { display:block; text-align:center; padding:4px 0; }
+    .meta-row { justify-content:center; }
+    .btn-print { margin-left:0; }
+    .footer-section { flex-direction:column; gap:20px; }
+    .sig-block, .sig-block-right { width:100%; text-align:center !important; }
+    .sig-block-right .sig-line { margin-left:auto; margin-right:auto; }
+    table.data-table { font-size:11px; }
+  }
+
+  /* ============== PRINT ============== */
+  @media print {
+    @page { size:A4 portrait; margin:12mm; }
+
+    html, body { background:#fff !important; }
+    body { padding:0 !important; margin:0 !important; display:block !important; }
+
     .container {
-      width: 100%;
-      max-width: 794px;
-      min-height: 1123px;
-      background: #ffffff;
-      padding: 40px 44px 36px;
-      border-radius: 12px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
-      position: relative;
-      display: flex;
-      flex-direction: column;
+      box-shadow:none !important;
+      border-radius:0 !important;
+      max-width:100% !important;
+      width:100% !important;
+      padding:0 !important;
     }
 
-    /* watermark - crisp and clear, no blur */
-    .watermark {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 55%;
-      max-width: 400px;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.1;
-      text-align: center;
-    }
-    .watermark img {
-      width: 100%;
-      height: auto;
-      filter: grayscale(100%) brightness(1.05);
-      image-rendering: auto;
-    }
+    /* watermark repeats on every page instead of only page 1 */
+    .watermark { position:fixed !important; opacity:0.07 !important; z-index:0; }
 
-    .content-area {
-      position: relative;
-      z-index: 1;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
+    .btn-group, .hint { display:none !important; }
 
-    /* header */
-    .header-table {
-      width: 100%;
-      border-collapse: collapse;
-      border-bottom: 2px solid #005792;
-      padding-bottom: 14px;
-      margin-bottom: 22px;
-      background: transparent;
-    }
-    .header-table td {
-      vertical-align: middle;
-      border: none;
-      padding: 0 6px 0 0;
-      background: transparent;
-    }
-    .header-left { width: 14%; text-align: left; }
-    .header-center { width: 56%; text-align: center; }
-    .header-right { width: 30%; text-align: right; }
+    /* keep the action cell in the flow (don't display:none the <td> itself —
+       removing table cells with display:none causes column/width misalignment
+       across browsers). Just hide the button inside it. */
+    .btn-remove { visibility:hidden !important; }
+    .action-col { width:0 !important; padding:0 !important; border:none !important; }
 
-    .logo-img {
-      width: 72px;
-      height: 72px;
-      object-fit: contain;
-      border-radius: 12px;
-      background: rgba(248, 250, 252, 0.7);
-      padding: 4px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-    }
+    .header-table, .footer-section { width:100% !important; }
+    .header-table { display:table !important; }
+    .header-table td { display:table-cell !important; }
 
-    .company-title {
-      color: #005792;
-      font-size: 21px;
-      font-weight: 700;
-      letter-spacing: -0.2px;
-      margin-bottom: 2px;
+    .meta-input, table.data-table input {
+      border:none !important; background:transparent !important; box-shadow:none !important;
+      font-weight:600; color:#142433 !important; padding:2px 0 !important;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator { display:none !important; }
+
+    .data-table th {
+      background:#005792 !important; color:#fff !important;
+      -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important;
+    }
+    .data-table tfoot td {
+      background:#eaf2f8 !important;
+      -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important;
     }
     .company-subtitle {
-      color: #2c3e50;
-      font-weight: 600;
-      font-size: 13px;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      background: rgba(238, 244, 250, 0.8);
-      display: inline-block;
-      padding: 2px 18px;
-      border-radius: 40px;
+      background:#eef4fa !important;
+      -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important;
     }
 
-    .meta-row {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      color: #1a2b3c;
-      margin-bottom: 6px;
-      white-space: nowrap;
-    }
-    .meta-input {
-      border: 1px solid #dce4ec;
-      border-radius: 8px;
-      padding: 5px 10px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #0b1e2e;
-      width: 140px;
-      text-align: right;
-      background: rgba(250, 252, 255, 0.7);
-      transition: 0.15s;
-    }
-    .meta-input:focus {
-      border-color: #005792;
-      outline: none;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 0 0 3px rgba(0,87,146,0.08);
-    }
+    table.data-table tbody tr:nth-child(even) td { background:#f7fafc !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    table.data-table tbody tr:nth-child(odd) td { background:#fff !important; }
 
-    /* table - fully transparent rows, no blur */
-    .table-wrap {
-      margin: 18px 0 10px;
-      border-radius: 14px;
-      overflow: hidden;
-      flex-shrink: 0;
-      background: transparent;
-      position: relative;
-      z-index: 1;
-    }
+    .sig-line { border-top-color:#1f3a57 !important; }
+    .footer-section { border-top-color:#cbdae8 !important; }
 
-    table.data-table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-      background: transparent;
-    }
-
-    table.data-table th {
-      background: #005792 !important;
-      color: #ffffff !important;
-      padding: 12px 8px;
-      font-weight: 600;
-      font-size: 12px;
-      border: none;
-      letter-spacing: 0.3px;
-    }
-    table.data-table th:first-child { border-radius: 12px 0 0 0; }
-    table.data-table th:last-child { border-radius: 0 12px 0 0; }
-
-    table.data-table td {
-      border: 1px solid rgba(200, 212, 224, 0.5);
-      padding: 4px 2px;
-      vertical-align: middle;
-      background: rgba(255, 255, 255, 0.15) !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-    }
-
-    /* completely transparent rows - no blur, no background */
-    table.data-table tr {
-      background: transparent !important;
-    }
-    table.data-table tbody tr {
-      background: transparent !important;
-    }
-    table.data-table tbody tr:nth-child(even) td {
-      background: rgba(248, 250, 252, 0.12) !important;
-    }
-    table.data-table tbody tr:nth-child(odd) td {
-      background: rgba(255, 255, 255, 0.08) !important;
-    }
-
-    .text-center { text-align: center !important; }
-    .text-left { text-align: left !important; }
-
-    table.data-table input {
-      border: none;
-      background: rgba(255, 255, 255, 0.35) !important;
-      width: 100%;
-      padding: 8px 6px;
-      font-size: 13px;
-      color: #142433;
-      border-radius: 6px;
-      transition: 0.1s;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-    }
-    table.data-table input:focus {
-      background: rgba(255, 255, 255, 0.85) !important;
-      outline: 2px solid #005792;
-      outline-offset: -1px;
-      box-shadow: 0 0 0 4px rgba(0,87,146,0.06);
-    }
-    table.data-table input::placeholder {
-      color: #8a9fb0;
-      font-weight: 400;
-    }
-
-    .qty-input, .unit-input, .date-input {
-      text-align: center;
-    }
-    .desc-input { text-align: left; }
-
-    /* buttons */
-    .btn-group {
-      margin: 22px 0 28px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      flex-shrink: 0;
-      position: relative;
-      z-index: 2;
-    }
-
-    button {
-      padding: 9px 18px;
-      border: none;
-      border-radius: 40px;
-      font-weight: 600;
-      font-size: 12px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-      background: #f1f6fa;
-      color: #1f3a57;
-      letter-spacing: 0.2px;
-    }
-    button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-    }
-    button:active { transform: scale(0.97); }
-
-    .btn-add { background: #005792; color: #fff; }
-    .btn-add:hover { background: #003f66; box-shadow: 0 6px 14px rgba(0,87,146,0.20); }
-
-    .btn-clear { background: #edf2f7; color: #2d3f57; }
-    .btn-clear:hover { background: #e2e8f0; }
-
-    .btn-export { background: #1e6f5c; color: #fff; }
-    .btn-export:hover { background: #155a4a; box-shadow: 0 6px 14px rgba(30,111,92,0.18); }
-
-    .btn-print { background: #2d3748; color: #fff; margin-left: auto; }
-    .btn-print:hover { background: #1a202c; box-shadow: 0 6px 14px rgba(45,55,72,0.18); }
-
-    .btn-remove {
-      background: rgba(229, 62, 62, 0.8);
-      color: #fff;
-      width: 30px;
-      height: 30px;
-      padding: 0;
-      font-size: 14px;
-      border-radius: 40px;
-      justify-content: center;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      transition: 0.15s;
-      line-height: 1;
-    }
-    .btn-remove:hover {
-      background: #c53030;
-      transform: scale(1.05);
-      box-shadow: 0 4px 8px rgba(229,62,62,0.20);
-    }
-
-    /* FOOTER */
-    .footer-section {
-      margin-top: auto;
-      padding-top: 28px;
-      border-top: 1px dashed rgba(203, 218, 232, 0.6);
-      display: flex;
-      justify-content: space-between;
-      flex-shrink: 0;
-      background: transparent;
-      position: relative;
-      z-index: 2;
-    }
-
-    .sig-block {
-      width: 45%;
-    }
-
-    .sig-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: #005792;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 6px;
-    }
-
-    .sig-line {
-      border-top: 2px solid #1f3a57;
-      width: 100%;
-      max-width: 200px;
-      padding-top: 6px;
-      margin-top: 32px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #3d5775;
-      white-space: nowrap;
-    }
-
-    .sig-block-right {
-      text-align: right;
-    }
-    .sig-block-right .sig-line {
-      margin-left: auto;
-    }
-
-    /* responsive */
-    @media (max-width: 640px) {
-      body { padding: 12px; }
-      .container { padding: 20px; min-height: auto; }
-      .header-left, .header-center, .header-right { display: block; width: 100%; text-align: center; }
-      .header-table td { display: block; text-align: center; padding: 4px 0; }
-      .meta-row { justify-content: center; }
-      .btn-print { margin-left: 0; }
-      .footer-section { flex-direction: column; gap: 20px; }
-      .sig-block, .sig-block-right { width: 100%; text-align: center !important; }
-      .sig-block-right .sig-line { margin-left: auto; margin-right: auto; }
-      .sig-line { max-width: 100%; }
-    }
-
-    /* PRINT - EXACTLY AS WEBPAGE */
-    @media print {
-      @page {
-        size: A4 portrait;
-        margin: 10mm 12mm 10mm 12mm;
-      }
-      body {
-        background: #ffffff !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        display: block;
-      }
-      .container {
-        box-shadow: none !important;
-        padding: 40px 44px 36px !important;
-        max-width: 100% !important;
-        min-height: auto !important;
-        border-radius: 0 !important;
-        width: 100% !important;
-        background: #ffffff !important;
-      }
-      .btn-group, th.action-col, td.action-col {
-        display: none !important;
-      }
-      .watermark {
-        opacity: 0.1 !important;
-        display: block !important;
-      }
-      .header-table, .footer-section {
-        display: flex !important;
-        width: 100% !important;
-      }
-      .header-table {
-        display: table !important;
-      }
-      .header-table td {
-        display: table-cell !important;
-        background: transparent !important;
-      }
-      .meta-input, table.data-table input {
-        border: none !important;
-        background: rgba(255, 255, 255, 0.2) !important;
-        padding: 2px 0 !important;
-        box-shadow: none !important;
-        font-weight: 600;
-        color: #142433 !important;
-      }
-      input[type="date"]::-webkit-calendar-picker-indicator {
-        display: none !important;
-      }
-      .data-table th {
-        background: #005792 !important;
-        color: white !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact;
-      }
-      .data-table td {
-        border-color: rgba(184, 201, 221, 0.4) !important;
-        background: rgba(255, 255, 255, 0.12) !important;
-      }
-      .data-table tbody tr:nth-child(even) td {
-        background: rgba(248, 250, 252, 0.10) !important;
-      }
-      .data-table tbody tr:nth-child(odd) td {
-        background: rgba(255, 255, 255, 0.06) !important;
-      }
-      .company-subtitle {
-        background: rgba(238, 244, 250, 0.8) !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .sig-line {
-        border-top-color: #1f3a57 !important;
-      }
-      .footer-section {
-        border-top-color: rgba(184, 201, 221, 0.4) !important;
-      }
-      .data-table tr {
-        page-break-inside: avoid;
-      }
-      .table-wrap {
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        background: transparent !important;
-      }
-      .container {
-        box-shadow: none !important;
-      }
-    }
-  </style>
+    table.data-table tbody tr { break-inside:avoid; page-break-inside:avoid; }
+    .table-wrap { box-shadow:none !important; }
+  }
+</style>
 </head>
 <body>
 
 <div class="container">
-
-  <!-- watermark - clear, no blur -->
   <div class="watermark">
     <img src="https://i.postimg.cc/dVNwKmqq/Whats-App-Image-2026-07-06-at-10-58-59-PM.jpg" alt="watermark" />
   </div>
 
   <div class="content-area">
 
-    <!-- header -->
     <table class="header-table">
       <tr>
         <td class="header-left">
@@ -461,7 +240,7 @@
         <td class="header-center">
           <div class="company-title">Habib Knit Fabrics (Pvt) Limited</div>
           <span class="company-subtitle">Request for Quotation (RFQ)</span>
-          <span class="company-subtitle">CNC Department </span>
+          <span class="company-subtitle">CNC Department</span>
         </td>
         <td class="header-right">
           <div class="meta-row">
@@ -476,26 +255,32 @@
       </tr>
     </table>
 
-    <!-- items table - transparent rows, no blur -->
     <div class="table-wrap">
       <table class="data-table" id="itemTable">
         <thead>
           <tr>
-            <th style="width: 38px;" class="text-center">#</th>
+            <th style="width:28px;" class="text-center">#</th>
             <th class="text-left">Description</th>
-            <th style="width: 78px;" class="text-center">Qty</th>
-            <th style="width: 88px;" class="text-center">Unit</th>
-            <th style="width: 124px;" class="text-center">Required Date</th>
-            <th style="width: 46px;" class="text-center action-col"></th>
+            <th style="width:52px;" class="text-center">Qty</th>
+            <th style="width:60px;" class="text-center">Unit</th>
+            <th style="width:70px;" class="text-center">Rate</th>
+            <th style="width:82px;" class="text-center">Amount</th>
+            <th style="width:104px;" class="text-center">Required Date</th>
+            <th class="action-col text-center"></th>
           </tr>
         </thead>
-        <tbody id="tableBody">
-          <!-- dynamic rows -->
-        </tbody>
+        <tbody id="tableBody"><!-- dynamic rows --></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5" class="text-right">Grand Total</td>
+            <td class="text-right" id="grandTotalCell">Rs. 0.00</td>
+            <td colspan="2" class="action-col"></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
+    <div class="hint">Tip: press <strong>Enter</strong> in the last row's description field to add a new row.</div>
 
-    <!-- buttons -->
     <div class="btn-group">
       <button type="button" class="btn-add" id="btnAddRow">➕ Add Item</button>
       <button type="button" class="btn-clear" id="btnClearRows">🗑️ Clear All</button>
@@ -503,7 +288,6 @@
       <button type="button" class="btn-print" id="btnPrint">🖨️ Print RFQ</button>
     </div>
 
-    <!-- FOOTER -->
     <div class="footer-section">
       <div class="sig-block">
         <div class="sig-title">Prepared By</div>
@@ -519,122 +303,165 @@
 </div>
 
 <script>
-  (function() {
-    'use strict';
+(function () {
+  'use strict';
 
-    const tbody = document.getElementById('tableBody');
-    const dateInput = document.getElementById('dateInput');
-    const todayStr = new Date().toISOString().split('T')[0];
-    dateInput.value = todayStr;
+  const tbody = document.getElementById('tableBody');
+  const dateInput = document.getElementById('dateInput');
+  const grandTotalCell = document.getElementById('grandTotalCell');
+  const todayStr = new Date().toISOString().split('T')[0];
+  dateInput.value = todayStr;
 
-    function escapeHtml(str) {
-      if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
+  function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
 
-    function generateRowHTML(index, data = {}) {
-      const desc = data.desc || '';
-      const qty = data.qty !== undefined ? data.qty : '';
-      const unit = data.unit || '';
-      const date = data.date || todayStr;
-      return `
-        <tr>
-          <td class="row-index text-center" style="font-weight:600; color:#1f3a57;">${index}</td>
-          <td><input type="text" class="desc-input" value="${escapeHtml(desc)}" placeholder="Item description"></td>
-          <td><input type="number" class="qty-input" min="0" step="1" value="${escapeHtml(qty)}" placeholder="0"></td>
-          <td><input type="text" class="unit-input" value="${escapeHtml(unit)}" placeholder="kg, m, pcs"></td>
-          <td><input type="date" class="date-input" value="${escapeHtml(date)}"></td>
-          <td class="text-center action-col">
-            <button type="button" class="btn-remove action-remove" aria-label="Remove row">✕</button>
-          </td>
-        </tr>
-      `;
-    }
+  function formatMoney(num) {
+    if (!isFinite(num)) num = 0;
+    return 'Rs. ' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
 
-    function updateRowNumbers() {
-      const rows = tbody.querySelectorAll('tr');
-      rows.forEach((row, idx) => {
-        const indexCell = row.querySelector('.row-index');
-        if (indexCell) indexCell.textContent = idx + 1;
+  function generateRowHTML(index, data = {}) {
+    const desc = data.desc !== undefined ? data.desc : '';
+    const qty = data.qty !== undefined ? data.qty : '';
+    const unit = data.unit !== undefined ? data.unit : '';
+    const rate = data.rate !== undefined ? data.rate : '';
+    const date = data.date || todayStr;
+    return `
+      <tr>
+        <td class="row-index text-center" style="font-weight:600;color:#1f3a57;">${index}</td>
+        <td><input type="text" class="desc-input" value="${escapeHtml(desc)}" placeholder="Item description"></td>
+        <td><input type="number" class="qty-input" min="0" step="any" value="${escapeHtml(qty)}" placeholder="0"></td>
+        <td><input type="text" class="unit-input" value="${escapeHtml(unit)}" placeholder="kg, m, pcs"></td>
+        <td><input type="number" class="rate-input" min="0" step="any" value="${escapeHtml(rate)}" placeholder="0.00"></td>
+        <td class="amount-cell">Rs. 0.00</td>
+        <td><input type="date" class="date-input" value="${escapeHtml(date)}"></td>
+        <td class="action-col text-center">
+          <button type="button" class="btn-remove action-remove" aria-label="Remove row">✕</button>
+        </td>
+      </tr>
+    `;
+  }
+
+  function updateRowNumbers() {
+    tbody.querySelectorAll('tr').forEach((row, idx) => {
+      const cell = row.querySelector('.row-index');
+      if (cell) cell.textContent = idx + 1;
+    });
+  }
+
+  function calcRow(row) {
+    const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
+    const rate = parseFloat(row.querySelector('.rate-input').value) || 0;
+    const amount = qty * rate;
+    row.querySelector('.amount-cell').textContent = formatMoney(amount);
+    return amount;
+  }
+
+  function calcGrandTotal() {
+    let total = 0;
+    tbody.querySelectorAll('tr').forEach(row => { total += calcRow(row); });
+    grandTotalCell.textContent = formatMoney(total);
+  }
+
+  function addRow(data = {}) {
+    tbody.insertAdjacentHTML('beforeend', generateRowHTML(tbody.children.length + 1, data));
+    updateRowNumbers();
+    calcGrandTotal();
+    return tbody.lastElementChild;
+  }
+
+  function removeRow(btn) {
+    if (tbody.children.length <= 1) {
+      const row = btn.closest('tr');
+      row.querySelectorAll('input').forEach(inp => {
+        inp.value = inp.type === 'date' ? todayStr : '';
       });
+      calcGrandTotal();
+      return;
     }
+    btn.closest('tr').remove();
+    updateRowNumbers();
+    calcGrandTotal();
+  }
 
-    function addRow(data = {}) {
-      const newIndex = tbody.children.length + 1;
-      tbody.insertAdjacentHTML('beforeend', generateRowHTML(newIndex, data));
-      updateRowNumbers();
-    }
+  function clearAllRows() {
+    tbody.innerHTML = '';
+    addRow({});
+  }
 
-    function removeRow(btn) {
-      if (tbody.children.length <= 1) {
-        const row = btn.closest('tr');
-        if (row) {
-          const inputs = row.querySelectorAll('input');
-          inputs.forEach(inp => {
-            if (inp.type === 'number') inp.value = '';
-            else if (inp.type === 'date') inp.value = todayStr;
-            else inp.value = '';
-          });
-        }
-        return;
-      }
-      btn.closest('tr').remove();
-      updateRowNumbers();
-    }
-
-    function clearAllRows() {
-      tbody.innerHTML = '';
-      addRow({});
-    }
-
-    function exportJSON() {
-      const rows = tbody.querySelectorAll('tr');
-      const data = [];
-      rows.forEach(row => {
-        const inputs = row.querySelectorAll('input');
-        if (inputs.length >= 4) {
-          data.push({
-            description: inputs[0].value.trim(),
-            quantity: inputs[1].value.trim() || '0',
-            unit: inputs[2].value.trim(),
-            requiredDate: inputs[3].value || todayStr
-          });
-        }
+  function exportJSON() {
+    const rows = tbody.querySelectorAll('tr');
+    const items = [];
+    let grandTotal = 0;
+    rows.forEach(row => {
+      const qtyVal = parseFloat(row.querySelector('.qty-input').value) || 0;
+      const rateVal = parseFloat(row.querySelector('.rate-input').value) || 0;
+      const amountVal = qtyVal * rateVal;
+      grandTotal += amountVal;
+      items.push({
+        description: row.querySelector('.desc-input').value.trim(),
+        quantity: qtyVal,
+        unit: row.querySelector('.unit-input').value.trim(),
+        rate: rateVal,
+        amount: Number(amountVal.toFixed(2)),
+        requiredDate: row.querySelector('.date-input').value || todayStr
       });
-      const jsonString = JSON.stringify(data, null, 2);
-      const blob = new Blob([jsonString], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `RFQ_${document.getElementById('rfqInput').value || 'export'}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-
-    // event listeners
-    document.getElementById('btnAddRow').addEventListener('click', () => addRow({}));
-    document.getElementById('btnClearRows').addEventListener('click', clearAllRows);
-    document.getElementById('btnPrint').addEventListener('click', () => window.print());
-    document.getElementById('btnExport').addEventListener('click', exportJSON);
-
-    tbody.addEventListener('click', function(e) {
-      const target = e.target.closest('.action-remove');
-      if (target) {
-        e.preventDefault();
-        removeRow(target);
-      }
     });
 
-    // initial row
-    addRow({});
+    const payload = {
+      rfqNo: document.getElementById('rfqInput').value.trim() || 'RFQ',
+      date: dateInput.value || todayStr,
+      items,
+      grandTotal: Number(grandTotal.toFixed(2))
+    };
 
-  })();
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `RFQ_${payload.rfqNo}_${payload.date}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  document.getElementById('btnAddRow').addEventListener('click', () => addRow({}));
+  document.getElementById('btnClearRows').addEventListener('click', clearAllRows);
+  document.getElementById('btnPrint').addEventListener('click', () => window.print());
+  document.getElementById('btnExport').addEventListener('click', exportJSON);
+
+  tbody.addEventListener('click', function (e) {
+    const target = e.target.closest('.action-remove');
+    if (target) { e.preventDefault(); removeRow(target); }
+  });
+
+  tbody.addEventListener('input', function (e) {
+    if (e.target.classList.contains('qty-input') || e.target.classList.contains('rate-input')) {
+      calcGrandTotal();
+    }
+  });
+
+  // Enter key in the description field of the last row adds a new row
+  tbody.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    if (!e.target.classList.contains('desc-input')) return;
+    const row = e.target.closest('tr');
+    if (row === tbody.lastElementChild) {
+      e.preventDefault();
+      const newRow = addRow({});
+      newRow.querySelector('.desc-input').focus();
+    }
+  });
+
+  addRow({});
+})();
 </script>
 </body>
 </html>
